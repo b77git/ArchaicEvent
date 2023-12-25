@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "ArchaicEvent",
+    "name": "ArchaicEvent",
+    "description": "",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
