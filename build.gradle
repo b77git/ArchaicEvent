@@ -56,7 +56,7 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
 
-    implementation 'com.google.code.gson:gson:2.10.1'
+    shadow 'com.google.code.gson:gson:2.10.1'
 //    shadow 'net.dv8tion:JDA:5.0.0-beta.18'
 //    shadow 'club.minnced:discord-webhooks:0.8.4'
 
@@ -93,9 +93,9 @@ shadowJar {
         ])
     }
 
-    relocate 'net.dv8tion', 'com.archaic.ArchaicRelay.dv8tion'
-    relocate 'org.slf4j', 'com.archaic.ArchaicRelay.slf4j'
-    relocate 'org.apache.commons.collections4', 'com.archaic.ArchaicRelay.commons.collections4'
+//    relocate 'net.dv8tion', 'com.archaic.ArchaicRelay.dv8tion'
+//    relocate 'org.slf4j', 'com.archaic.ArchaicRelay.slf4j'
+//    relocate 'org.apache.commons.collections4', 'com.archaic.ArchaicRelay.commons.collections4'
 
     exclude 'META-INF/versions/**'
 }

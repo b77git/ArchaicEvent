@@ -1,31 +1,28 @@
 package com.archaic.archaicevent;
 
 import com.archaic.archaicevent.Helper.PlayerData;
-import com.mojang.realmsclient.gui.ChatFormatting;
-import ibxm.Player;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import static com.archaic.archaicevent.Helper.JsonHelper.addPlayerDataToFile;
 
 public class ServersideHandlers {
 
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        String playerName = event.player.getDisplayNameString();
+        String playerUUID = event.player.getUniqueID().toString();
+
+        PlayerData newPlayerData = new PlayerData(playerName, playerUUID);
+
         File dataFile = new File(ArchaicEvent.datafolderDir, "data.json");
-        try (FileWriter writer = new FileWriter(dataFile)) {
-            EntityPlayer player = event.player;
 
-            String name = ChatFormatting.stripFormatting(player.getDisplayNameString());
-            String uuid = player.getUniqueID().toString();
-            PlayerData data = new PlayerData(name, uuid);
+        addPlayerDataToFile(newPlayerData, dataFile);
 
-            ArchaicEvent.gson.toJson(data, writer);
-        } catch (IOException e){
-            ArchaicEvent.logger.info("An error writing to the file has occured: " + e);
-        }
+        // Continue with other server-side logic
+        event.player.sendMessage(new TextComponentString("Welcome to the server!"));
     }
 }

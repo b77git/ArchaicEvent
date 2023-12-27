@@ -4,6 +4,8 @@ import com.archaic.archaicevent.Client.ClientKeybinds;
 import com.archaic.archaicevent.Gui.GuiHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -53,10 +55,11 @@ public class ArchaicEvent {
 
     @EventHandler
     public void serverSetup(FMLServerStartingEvent event) {
+        logger.info("Joining multiplayer world doing server setup!");
         MinecraftForge.EVENT_BUS.register(new ServersideHandlers());
         // Get the server directory
         File serverDir = event.getServer().getDataDirectory();
-        File datafolderDir = new File(serverDir, "EventData");
+        datafolderDir = new File(serverDir, "EventData");
         if (!datafolderDir.exists()) {
             if (datafolderDir.mkdir()) {
                 logger.info("EventData folder created at: " + datafolderDir.getAbsolutePath());

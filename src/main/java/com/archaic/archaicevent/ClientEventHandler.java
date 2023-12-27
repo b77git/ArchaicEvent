@@ -12,10 +12,10 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         // Check if it's a client-side event
-        if (event.player.getEntityWorld().isRemote) {
+        if (event.player.world.getMinecraftServer() instanceof IntegratedServer) {
             event.player.sendMessage(new TextComponentString(TextFormatting.RED + "This is a singleplayer world! Do not expect this mod to work as it is only intended for use on the Archaic Network event server."));
             return;
         }
-        event.player.sendMessage(new TextComponentString("good"));
+        event.player.sendMessage(new TextComponentString("Good you are on a dedicated server!"));
     }
 }

@@ -12,4 +12,12 @@ public class PlayerData {
         this.alive = true;
         this.inTeam = false;
     }
+
+    public String getPlayerName(){
+        return username;
+    }
+
+    public String getPlayerUUID(){
+        return uuid;
+    }
 }
