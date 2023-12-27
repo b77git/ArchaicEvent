@@ -1,6 +1,6 @@
 [
   {
-    "modid": "ArchaicEvent",
+    "modid": "archaicevent",
     "name": "ArchaicEvent",
     "description": "",
     "version": "${version}",
@@ -11,6 +11,6 @@
     "credits": "",
     "logoFile": "",
     "screenshots": [],
-    "dependencies": []
+    "dependencies": ["ftblib@[5.4.7.2]"]
   }
 ]
