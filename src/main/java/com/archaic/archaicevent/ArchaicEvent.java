@@ -33,6 +33,9 @@ public class ArchaicEvent {
     public static Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
     public static File datafolderDir;
 
+    public static File playerDataFile;
+    public static File teamDatafile;
+
     @Mod.Instance(MOD_ID)
     public static ArchaicEvent INSTANCE;
     @EventHandler
@@ -60,6 +63,9 @@ public class ArchaicEvent {
         // Get the server directory
         File serverDir = event.getServer().getDataDirectory();
         datafolderDir = new File(serverDir, "EventData");
+
+        playerDataFile = new File(ArchaicEvent.datafolderDir, "PlayerData.json");
+        teamDatafile = new File(ArchaicEvent.datafolderDir, "TeamData.json");
         if (!datafolderDir.exists()) {
             if (datafolderDir.mkdir()) {
                 logger.info("EventData folder created at: " + datafolderDir.getAbsolutePath());
