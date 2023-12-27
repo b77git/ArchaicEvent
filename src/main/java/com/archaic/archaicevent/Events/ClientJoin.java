@@ -1,4 +1,4 @@
-package com.archaic.archaicevent;
+package com.archaic.archaicevent.Events;
 
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.text.TextComponentString;
@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 // Client-side event handler
-public class ClientEventHandler {
+public class ClientJoin {
 
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
