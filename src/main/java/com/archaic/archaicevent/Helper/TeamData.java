@@ -1,6 +1,7 @@
 package com.archaic.archaicevent.Helper;
 
 import com.archaic.archaicevent.ArchaicEvent;
+import net.minecraft.dispenser.ILocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +32,33 @@ public class TeamData {
 
         // Update the JSON to reflect this change
         updateTeamDataInFile(this, ArchaicEvent.teamDatafile);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BeaconData getBeacon() {
+        return beacon;
+    }
+
+    public PlayerData getOwner() {
+        return owner;
+    }
+
+    public List<PlayerData> getMembers() {
+        return members;
+    }
+
+    public void setBeacon(BeaconData beacon) {
+        this.beacon = beacon;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setOwner(PlayerData owner) {
+        this.owner = owner;
     }
 }
