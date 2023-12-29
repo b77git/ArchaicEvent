@@ -1,5 +1,7 @@
 package com.archaic.archaicevent.Commands;
 
+import com.archaic.archaicevent.Gui.Teams;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -19,7 +21,6 @@ public class TeamsCommand extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        sender.sendMessage(new TextComponentString("Executing /archaic teams"));
+        Minecraft.getMinecraft().displayGuiScreen(new Teams());
     }
-
 }
