@@ -7,7 +7,7 @@ group = 'com.archaic'
 version = '1.0'
 
 java {
-    archivesBaseName = 'archaic-exporter'
+    archivesBaseName = 'archaic-events'
     toolchain.languageVersion = JavaLanguageVersion.of(8)
 }
 
@@ -78,15 +78,15 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 shadowJar {
-    baseName = 'archaic-exporter-shaded'
+    baseName = 'archaic-events-shaded'
     classifier = null
     version = null
     configurations = [project.configurations.shadow]
-    archiveFileName = "archaic-exporter-shaded.jar"
+    archiveFileName = "archaic-events-shaded.jar"
 
     manifest {
         attributes([
-                "Specification-Title"     : "archaicexporter",
+                "Specification-Title"     : "archaicevents",
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")

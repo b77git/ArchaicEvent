@@ -2,13 +2,11 @@ package com.archaic.archaicevent.Events;
 
 import com.archaic.archaicevent.ArchaicEvent;
 import com.archaic.archaicevent.Helper.PlayerData;
-import com.archaic.archaicevent.Helper.TeamData;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import static com.archaic.archaicevent.Helper.JsonHelper.addPlayerDataToFile;
-import static com.archaic.archaicevent.Helper.JsonHelper.addTeamDataToFile;
 
 
 public class ServerJoin {

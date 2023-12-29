@@ -1,11 +1,13 @@
 package com.archaic.archaicevent;
 
 import com.archaic.archaicevent.Client.ClientKeybinds;
+import com.archaic.archaicevent.Commands.CommandBaseHandler;
 import com.archaic.archaicevent.Events.ClientJoin;
 import com.archaic.archaicevent.Events.ServerJoin;
 import com.archaic.archaicevent.Gui.GuiHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.command.CommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -49,7 +51,6 @@ public class ArchaicEvent {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
-
     }
 
     @EventHandler
@@ -58,7 +59,7 @@ public class ArchaicEvent {
 
     @EventHandler
     public void serverSetup(FMLServerStartingEvent event) {
-        logger.info("Joining multiplayer world doing server setup!");
+        event.registerServerCommand(new CommandBaseHandler());
         MinecraftForge.EVENT_BUS.register(new ServerJoin());
         // Get the server directory
         File serverDir = event.getServer().getDataDirectory();

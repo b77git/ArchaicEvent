@@ -74,7 +74,7 @@ public class JsonHelper {
 
                 // Write the updated data back to the file
                 writePlayerDataToFile(existingData, dataFile);
-                return; // Exit the method after updating
+                return;
             }
         }
     }
@@ -136,7 +136,7 @@ public class JsonHelper {
 
                 // Write the updated data back to the file
                 writeTeamDataToFile(existingTeams, dataFile);
-                return; // Exit the method after updating
+                return;
             }
         }
     }

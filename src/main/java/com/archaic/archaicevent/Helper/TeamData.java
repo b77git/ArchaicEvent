@@ -13,12 +13,15 @@ public class TeamData {
     private PlayerData owner;
     private BeaconData beacon;
     private List<PlayerData> members;
+    private List<PlayerData> pendingInvites;
 
     public TeamData(String name, PlayerData owner){
         this.name = name;
         this.owner = owner;
         this.beacon = null;
         this.members = new ArrayList<>();
+        this.pendingInvites = new ArrayList<>();
+
         this.members.add(owner);
     }
 
@@ -32,6 +35,10 @@ public class TeamData {
 
         // Update the JSON to reflect this change
         updateTeamDataInFile(this, ArchaicEvent.teamDatafile);
+    }
+
+    public void addInvite(PlayerData player){
+        this.pendingInvites.add(player);
     }
 
     public String getName() {
