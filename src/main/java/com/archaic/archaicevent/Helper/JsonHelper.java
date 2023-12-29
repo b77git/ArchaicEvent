@@ -113,7 +113,7 @@ public class JsonHelper {
         }
     }
 
-    private static boolean containsTeamData(List<TeamData> dataList, TeamData newTeamData) {
+    public static boolean containsTeamData(List<TeamData> dataList, TeamData newTeamData) {
         // Check if the new team data matches any existing entry
         for (TeamData existingTeamData : dataList) {
             if (existingTeamData.getTeamName().equals(newTeamData.getTeamName())) {

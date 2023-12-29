@@ -32,6 +32,10 @@ public class PlayerData {
         return null; // No match found
     }
 
+    public boolean isInTeam() {
+        return inTeam;
+    }
+
     public String getPlayerName(){
         return username;
     }
