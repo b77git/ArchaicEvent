@@ -2,12 +2,11 @@ package com.archaic.archaicevent.Commands;
 
 import com.archaic.archaicevent.ArchaicEvent;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,12 +37,12 @@ public class CommandBaseHandler extends CommandBase {
         if (subCommand.equals("move") || subCommand.equals("invite") || subCommand.equals("create") || subCommand.equals("teams")) {
             // Commands requiring permission level 0
             if (checkPermission(sender, 0)) {
-                executePlayerCommand(sender, subCommand, args);
+                executePlayerCommand(server, sender, subCommand, args);
             }
         } else if (subCommand.equals("spy")) {
             // Command requiring operator (op) permission
             if (checkPermission(sender, 2)) {
-                executeOpCommand(sender, subCommand, args);
+                executeOpCommand(server, sender, subCommand, args);
             }
         } else {
             sender.sendMessage(new TextComponentString("Unknown command: " + subCommand));
@@ -59,37 +58,38 @@ public class CommandBaseHandler extends CommandBase {
 
             return player.canUseCommand(requiredPermissionLevel, getName());
         }
-
-        ArchaicEvent.logger.info("Non-player entity. Assuming permission level 0.");
-        return requiredPermissionLevel == 0;
+        return true;
     }
 
-    private void executePlayerCommand(ICommandSender sender, String subCommand, String[] args) {
+    private void executePlayerCommand(MinecraftServer server, ICommandSender sender, String subCommand, String[] args) {
         switch (subCommand) {
             case "move":
-                sender.sendMessage(new TextComponentString("Executing /archaic move"));
+                new MoveCommand().execute(server, sender, args);
                 break;
             case "invite":
-                sender.sendMessage(new TextComponentString("Executing /archaic invite"));
+                new InviteCommand().execute(server, sender, args);
                 break;
             case "create":
-                sender.sendMessage(new TextComponentString("Executing /archaic create"));
+                new CreateCommand().execute(server, sender, args);
                 break;
             case "teams":
-                sender.sendMessage(new TextComponentString("Executing /archaic teams"));
+                new TeamsCommand().execute(server, sender, args);
                 break;
             case "help":
                 sender.sendMessage(new TextComponentString("Executing /archaic help"));
                 break;
-
+            default:
+                sender.sendMessage(new TextComponentString("Unknown subcommand: " + subCommand));
         }
     }
 
-    private void executeOpCommand(ICommandSender sender, String subCommand, String[] args) {
+    private void executeOpCommand(MinecraftServer server, ICommandSender sender, String subCommand, String[] args) {
         switch (subCommand) {
             case "spy":
-                sender.sendMessage(new TextComponentString("Executing /archaic spy"));
+                new SpyCommand().execute(server, sender, args);
                 break;
+            default:
+                sender.sendMessage(new TextComponentString("Unknown subcommand: " + subCommand));
         }
     }
 
