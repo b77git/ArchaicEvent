@@ -50,7 +50,7 @@ public class CreateCommand extends CommandBase {
         TeamData teamData = new TeamData(teamName, owner);
 
         if (teamAlreadyExists(teamData)) {
-            sender.sendMessage(new TextComponentString("This team name already exists."));
+            sender.sendMessage(new TextComponentString("A team with this name already exists."));
             return;
         }
 

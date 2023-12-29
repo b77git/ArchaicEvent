@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class JsonHelper {
@@ -79,6 +80,18 @@ public class JsonHelper {
         }
     }
 
+    public static PlayerData getPlayerDataByName(String playerName, File dataFile) {
+        List<PlayerData> existingData = readExistingPlayerDataFromFile(dataFile);
+
+        for (PlayerData playerData : existingData) {
+            if (playerData.getPlayerName().equals(playerName)) {
+                return playerData;
+            }
+        }
+
+        return null; // Player data not found
+    }
+
     public static void addTeamDataToFile(TeamData newTeamData, File dataFile) {
         // Read existing teams from the file
         List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
@@ -91,6 +104,28 @@ public class JsonHelper {
             // Write the updated data back to the file
             writeTeamDataToFile(existingTeams, dataFile);
         }
+    }
+
+    public static void removeTeamDataFromFile(String teamName, File dataFile) {
+        // Read existing teams from the file
+        List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
+
+        // Find and remove the existing team
+        Iterator<TeamData> iterator = existingTeams.iterator();
+        while (iterator.hasNext()) {
+            TeamData teamData = iterator.next();
+            if (teamData.getTeamName().equals(teamName)) {
+                // Update each member in the team to no longer be in a team
+                for (PlayerData member : teamData.getMembers()) {
+                    member.setInTeam(false);
+                }
+                // Remove the team from the list
+                iterator.remove();
+            }
+        }
+
+        // Write the updated data back to the file
+        writeTeamDataToFile(existingTeams, dataFile);
     }
 
     public static List<TeamData> readExistingTeamDataFromFile(File dataFile) {
@@ -139,5 +174,17 @@ public class JsonHelper {
                 return;
             }
         }
+    }
+
+    public static TeamData getTeamDataByName(String teamName, File dataFile) {
+        List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
+
+        for (TeamData teamData : existingTeams) {
+            if (teamData.getTeamName().equals(teamName)) {
+                return teamData;
+            }
+        }
+
+        return null; // Team data not found
     }
 }

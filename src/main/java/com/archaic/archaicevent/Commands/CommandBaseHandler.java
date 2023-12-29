@@ -78,6 +78,10 @@ public class CommandBaseHandler extends CommandBase {
             case "help":
                 sender.sendMessage(new TextComponentString("Executing /archaic help"));
                 break;
+            case "leave":
+                break;
+            case "disband":
+                break;
             default:
                 sender.sendMessage(new TextComponentString("Unknown subcommand: " + subCommand));
         }
@@ -87,6 +91,13 @@ public class CommandBaseHandler extends CommandBase {
         switch (subCommand) {
             case "spy":
                 new SpyCommand().execute(server, sender, args);
+                break;
+            case "forcedisband":
+                new ForceDisbandCommand().execute(server, sender, args);
+                break;
+            case "forcekick":
+                break;
+            case "forceadd":
                 break;
             default:
                 sender.sendMessage(new TextComponentString("Unknown subcommand: " + subCommand));
