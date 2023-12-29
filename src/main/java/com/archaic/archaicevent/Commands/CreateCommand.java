@@ -55,7 +55,7 @@ public class CreateCommand extends CommandBase {
         }
 
         JsonHelper.addTeamDataToFile(teamData, ArchaicEvent.teamDatafile);
-        sender.sendMessage(new TextComponentString("The team " + teamName + " has been created"));
+        sender.sendMessage(new TextComponentString("The team " + teamName + " has been created."));
     }
 
     private boolean validateTeamName(String teamName) {
