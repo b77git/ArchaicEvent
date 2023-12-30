@@ -1,6 +1,8 @@
 package com.archaic.archaicevent.Helper;
 
 import com.archaic.archaicevent.ArchaicEvent;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -13,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class JsonHelper {
+    public static Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
 
     private static final Type PLAYER_DATA_LIST_TYPE = new TypeToken<List<PlayerData>>() {}.getType();
     private static final Type TEAM_DATA_LIST_TYPE = new TypeToken<List<TeamData>>() {}.getType();
@@ -34,7 +37,7 @@ public class JsonHelper {
     public static List<PlayerData> readExistingPlayerDataFromFile(File dataFile) {
         try (FileReader reader = new FileReader(dataFile)) {
             // Deserialize the existing data from the file
-            return ArchaicEvent.gson.fromJson(reader, PLAYER_DATA_LIST_TYPE);
+            return gson.fromJson(reader, PLAYER_DATA_LIST_TYPE);
         } catch (IOException e) {
             ArchaicEvent.logger.error("An error occurred while reading player data from the file: " + e.getMessage());
             return new ArrayList<>(); // Return an empty list if an error occurs
@@ -44,7 +47,7 @@ public class JsonHelper {
     private static void writePlayerDataToFile(List<PlayerData> data, File dataFile) {
         try (FileWriter writer = new FileWriter(dataFile)) {
             // Serialize and write the updated data to the file
-            ArchaicEvent.gson.toJson(data, writer);
+            gson.toJson(data, writer);
             ArchaicEvent.logger.info("Player data written successfully to: " + dataFile.getAbsolutePath());
         } catch (IOException e) {
             ArchaicEvent.logger.error("An error occurred while writing player data to the file: " + e.getMessage());
@@ -117,7 +120,7 @@ public class JsonHelper {
             if (teamData.getTeamName().equals(teamName)) {
                 // Update each member in the team to no longer be in a team
                 for (PlayerData member : teamData.getMembers()) {
-                    member.setInTeam(false);
+                    member.setinTeam(false);
                 }
                 // Remove the team from the list
                 iterator.remove();
@@ -131,7 +134,7 @@ public class JsonHelper {
     public static List<TeamData> readExistingTeamDataFromFile(File dataFile) {
         try (FileReader reader = new FileReader(dataFile)) {
             // Deserialize the existing data from the file
-            return ArchaicEvent.gson.fromJson(reader, TEAM_DATA_LIST_TYPE);
+            return gson.fromJson(reader, TEAM_DATA_LIST_TYPE);
         } catch (IOException e) {
             ArchaicEvent.logger.error("An error occurred while reading team data from the file: " + e.getMessage());
             return new ArrayList<>(); // Return an empty list if an error occurs
@@ -141,7 +144,7 @@ public class JsonHelper {
     private static void writeTeamDataToFile(List<TeamData> data, File dataFile) {
         try (FileWriter writer = new FileWriter(dataFile)) {
             // Serialize and write the updated data to the file
-            ArchaicEvent.gson.toJson(data, writer);
+            gson.toJson(data, writer);
             ArchaicEvent.logger.info("Team data written successfully to: " + dataFile.getAbsolutePath());
         } catch (IOException e) {
             ArchaicEvent.logger.error("An error occurred while writing team data to the file: " + e.getMessage());
@@ -186,5 +189,17 @@ public class JsonHelper {
         }
 
         return null; // Team data not found
+    }
+
+    public static TeamData getTeamByOwnerName(String ownerName, File dataFile) {
+        List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
+
+        for (TeamData teamData : existingTeams) {
+            if (teamData.getOwner().getPlayerName().equals(ownerName)) {
+                return teamData;
+            }
+        }
+
+        return null; // Player does not own a team
     }
 }

@@ -26,15 +26,16 @@ public class DisbandCommand extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        PlayerData playerData = JsonHelper.getPlayerDataByName(sender.getDisplayName().getUnformattedComponentText(), ArchaicEvent.playerDataFile);
-        TeamData playerTeam = playerData.getTeam();
+        PlayerData playerData = JsonHelper.getPlayerDataByName(sender.getDisplayName().getUnformattedText(), ArchaicEvent.playerDataFile);
 
-        if (playerTeam == null) {
+        if (!playerData.inTeam()) {
             sender.sendMessage(new TextComponentString("You are not in a team!"));
             return;
         }
 
-        if (playerTeam.getOwner() != playerData) {
+        TeamData playerTeam = JsonHelper.getTeamByOwnerName(playerData.getPlayerName(), ArchaicEvent.teamDatafile);
+
+        if (playerTeam.getOwner() == null) {
             sender.sendMessage(new TextComponentString("You are not the owner of your team!"));
             return;
         }

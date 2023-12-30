@@ -9,9 +9,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CommandBaseHandler extends CommandBase {
+
+    private final Set<String> playerCommands = new HashSet<>(Arrays.asList("move", "invite", "create", "teams", "help", "join", "leave", "disband"));
+    private final Set<String> opCommands = new HashSet<>(Arrays.asList("spy", "forcedisband", "forcekick", "forceadd"));
 
     @Override
     public String getName() {
@@ -34,13 +40,11 @@ public class CommandBaseHandler extends CommandBase {
         String subCommand = args[0];
 
         // Check permissions and dispatch to the appropriate method
-        if (subCommand.equals("move") || subCommand.equals("invite") || subCommand.equals("create") || subCommand.equals("teams")) {
-            // Commands requiring permission level 0
+        if (playerCommands.contains(subCommand)) {
             if (checkPermission(sender, 0)) {
                 executePlayerCommand(server, sender, subCommand, args);
             }
-        } else if (subCommand.equals("spy")) {
-            // Command requiring operator (op) permission
+        } else if (opCommands.contains(subCommand)) {
             if (checkPermission(sender, 2)) {
                 executeOpCommand(server, sender, subCommand, args);
             }
@@ -75,13 +79,12 @@ public class CommandBaseHandler extends CommandBase {
             case "teams":
                 new TeamsCommand().execute(server, sender, args);
                 break;
-            case "help":
-                sender.sendMessage(new TextComponentString("Executing /archaic help"));
-                break;
-            case "leave":
-                break;
             case "disband":
                 new DisbandCommand().execute(server, sender, args);
+                break;
+            case "help":
+            case "join":
+            case "leave":
                 break;
             default:
                 sender.sendMessage(new TextComponentString("Unknown subcommand: " + subCommand));
@@ -97,7 +100,6 @@ public class CommandBaseHandler extends CommandBase {
                 new ForceDisbandCommand().execute(server, sender, args);
                 break;
             case "forcekick":
-                break;
             case "forceadd":
                 break;
             default:

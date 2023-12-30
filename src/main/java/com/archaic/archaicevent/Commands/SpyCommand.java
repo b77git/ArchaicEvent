@@ -20,11 +20,11 @@ public class SpyCommand extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        sender.sendMessage(new TextComponentString("Executing /archaic spy"));
+        toggleSpy(server, sender, args);
     }
 
     public void toggleSpy(MinecraftServer server, ICommandSender sender, String[] args){
-        PlayerData player = new PlayerData(sender.getDisplayName().getUnformattedComponentText(), sender.getCommandSenderEntity().getUniqueID().toString());
+        PlayerData player = new PlayerData(sender.getDisplayName().getUnformattedText(), sender.getCommandSenderEntity().getUniqueID().toString());
         if (player.isSpyToggled()){
             player.setSpyToggled(true);
             return;
