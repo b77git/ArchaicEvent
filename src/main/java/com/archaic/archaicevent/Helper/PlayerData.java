@@ -12,14 +12,14 @@ public class PlayerData {
     private final String username;
     private final String uuid;
     private boolean alive;
-    private boolean inTeam;
+    private TeamData team;
     private boolean spyToggled;
 
     public PlayerData (String username, String uuid) {
         this.username = username;
         this.uuid = uuid;
         this.alive = true;
-        this.inTeam = false;
+        this.team = null;
         this.spyToggled = false;
     }
 
@@ -34,8 +34,8 @@ public class PlayerData {
         return null; // No match found
     }
 
-    public boolean isInTeam() {
-        return inTeam;
+    public TeamData getTeam() {
+        return team;
     }
 
     public boolean isSpyToggled() {
@@ -50,10 +50,8 @@ public class PlayerData {
         return uuid;
     }
 
-    public void setInTeam(boolean inTeam) {
-        this.inTeam = inTeam;
-
-        // Update the JSON to reflect this change
+    public void setTeam(TeamData team) {
+        this.team = team;
         updatePlayerDataInFile(this, ArchaicEvent.playerDataFile);
     }
 

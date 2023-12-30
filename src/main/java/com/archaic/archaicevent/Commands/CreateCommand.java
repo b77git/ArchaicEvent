@@ -35,14 +35,14 @@ public class CreateCommand extends CommandBase {
 
     public void createTeam(String[] args, ICommandSender sender){
         String teamName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        PlayerData owner = new PlayerData(sender.getDisplayName().getUnformattedComponentText(), sender.getCommandSenderEntity().getUniqueID().toString());
+        PlayerData owner = JsonHelper.getPlayerDataByName(sender.getDisplayName().getUnformattedComponentText(), ArchaicEvent.playerDataFile);
 
         if (!validateTeamName(teamName)) {
             sender.sendMessage(new TextComponentString("Invalid team name."));
             return;
         }
 
-        if (owner.isInTeam()){
+        if (owner.getTeam() != null){
             sender.sendMessage(new TextComponentString("You are already in a team."));
             return;
         }

@@ -81,6 +81,7 @@ public class CommandBaseHandler extends CommandBase {
             case "leave":
                 break;
             case "disband":
+                new DisbandCommand().execute(server, sender, args);
                 break;
             default:
                 sender.sendMessage(new TextComponentString("Unknown subcommand: " + subCommand));
