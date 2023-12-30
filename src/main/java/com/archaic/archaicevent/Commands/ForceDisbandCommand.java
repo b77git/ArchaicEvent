@@ -6,6 +6,7 @@ import com.archaic.archaicevent.Helper.TeamData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class ForceDisbandCommand extends CommandBase {
             TeamData teamData = JsonHelper.getTeamDataByName(teamName, ArchaicEvent.teamDatafile);
             if (teamData != null) {
                 disband(server, sender, teamData);
+                sender.sendMessage(new TextComponentString(teamName + " has been disbanded."));
             } else {
                 sender.sendMessage(new TextComponentString("Team not found: " + teamName));
             }

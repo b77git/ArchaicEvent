@@ -52,7 +52,7 @@ public class DisbandCommand extends CommandBase {
             EntityPlayerMP player = getPlayerByUsername(member.getPlayerName(), server);
 
             if (player != null) {
-                player.sendMessage(new TextComponentString("Your team has been disbanded by an admin."));
+                player.sendMessage(new TextComponentString("Your team has been disbanded."));
             }
         }
     }
