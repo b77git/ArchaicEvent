@@ -33,7 +33,7 @@ public class DisbandCommand extends CommandBase {
             return;
         }
 
-        TeamData playerTeam = JsonHelper.getTeamByOwnerName(playerData.getPlayerName(), ArchaicEvent.teamDatafile);
+        TeamData playerTeam = JsonHelper.getTeamByMemberName(playerData.getPlayerName(), ArchaicEvent.teamDatafile);
 
         if (playerTeam.getOwner() == null) {
             sender.sendMessage(new TextComponentString("You are not the owner of your team!"));

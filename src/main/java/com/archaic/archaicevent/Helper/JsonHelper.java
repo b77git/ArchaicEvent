@@ -15,42 +15,50 @@ import java.util.Iterator;
 import java.util.List;
 
 public class JsonHelper {
-    public static Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
-
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
     private static final Type PLAYER_DATA_LIST_TYPE = new TypeToken<List<PlayerData>>() {}.getType();
     private static final Type TEAM_DATA_LIST_TYPE = new TypeToken<List<TeamData>>() {}.getType();
 
-    public static void addPlayerDataToFile(PlayerData newData, File dataFile) {
-        // Read existing entries from the file
-        List<PlayerData> existingData = readExistingPlayerDataFromFile(dataFile);
-
-        // Check if the new data matches any existing entry
-        if (!containsPlayerData(existingData, newData)) {
-            // Add the new entry to the existing data
-            existingData.add(newData);
-
-            // Write the updated data back to the file
-            writePlayerDataToFile(existingData, dataFile);
+    private static <T> void writeDataToFile(List<T> data, File dataFile, Type type) {
+        try (FileWriter writer = new FileWriter(dataFile)) {
+            gson.toJson(data, type, writer);
+            ArchaicEvent.logger.info("Data written successfully to: " + dataFile.getAbsolutePath());
+        } catch (IOException e) {
+            handleIOException("An error occurred while writing data to the file", e);
         }
     }
+
+    private static <T> void addDataToFile(List<T> existingData, T newData, File dataFile, Type type) {
+        if (!existingData.contains(newData)) {
+            existingData.add(newData);
+            writeDataToFile(existingData, dataFile, type);
+        }
+    }
+
+    public static void addPlayerDataToFile(PlayerData newData, File dataFile) {
+        List<PlayerData> existingData = readExistingPlayerDataFromFile(dataFile);
+        addDataToFile(existingData, newData, dataFile, PLAYER_DATA_LIST_TYPE);
+    }
+
 
     public static List<PlayerData> readExistingPlayerDataFromFile(File dataFile) {
         try (FileReader reader = new FileReader(dataFile)) {
-            // Deserialize the existing data from the file
             return gson.fromJson(reader, PLAYER_DATA_LIST_TYPE);
         } catch (IOException e) {
             ArchaicEvent.logger.error("An error occurred while reading player data from the file: " + e.getMessage());
-            return new ArrayList<>(); // Return an empty list if an error occurs
+            return new ArrayList<>();
         }
     }
 
-    private static void writePlayerDataToFile(List<PlayerData> data, File dataFile) {
-        try (FileWriter writer = new FileWriter(dataFile)) {
-            // Serialize and write the updated data to the file
-            gson.toJson(data, writer);
-            ArchaicEvent.logger.info("Player data written successfully to: " + dataFile.getAbsolutePath());
-        } catch (IOException e) {
-            ArchaicEvent.logger.error("An error occurred while writing player data to the file: " + e.getMessage());
+    public static void updatePlayerDataInFile(PlayerData updatedData, File dataFile) {
+        List<PlayerData> existingData = readExistingPlayerDataFromFile(dataFile);
+        for (int i = 0; i < existingData.size(); i++) {
+            PlayerData existingPlayerData = existingData.get(i);
+            if (existingPlayerData.getPlayerUUID().equals(updatedData.getPlayerUUID())) {
+                existingData.set(i, updatedData);
+                writeDataToFile(existingData, dataFile, PLAYER_DATA_LIST_TYPE);
+                return;
+            }
         }
     }
 
@@ -65,24 +73,6 @@ public class JsonHelper {
         return false; // No match found
     }
 
-    public static void updatePlayerDataInFile(PlayerData updatedData, File dataFile) {
-        // Read existing entries from the file
-        List<PlayerData> existingData = readExistingPlayerDataFromFile(dataFile);
-
-        // Find and update the existing entry
-        for (int i = 0; i < existingData.size(); i++) {
-            PlayerData existingPlayerData = existingData.get(i);
-            if (existingPlayerData.getPlayerUUID().equals(updatedData.getPlayerUUID())) {
-                // Update the existing entry with new data
-                existingData.set(i, updatedData);
-
-                // Write the updated data back to the file
-                writePlayerDataToFile(existingData, dataFile);
-                return;
-            }
-        }
-    }
-
     public static PlayerData getPlayerDataByName(String playerName, File dataFile) {
         List<PlayerData> existingData = readExistingPlayerDataFromFile(dataFile);
 
@@ -95,18 +85,16 @@ public class JsonHelper {
         return null; // Player data not found
     }
 
-    public static void addTeamDataToFile(TeamData newTeamData, File dataFile) {
-        // Read existing teams from the file
-        List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
+    public static boolean doesPlayerExistByName(String playerName, File dataFile) {
+        List<PlayerData> existingData = readExistingPlayerDataFromFile(dataFile);
 
-        // Check if the new team data matches any existing entry
-        if (!containsTeamData(existingTeams, newTeamData)) {
-            // Add the new entry to the existing data
-            existingTeams.add(newTeamData);
-
-            // Write the updated data back to the file
-            writeTeamDataToFile(existingTeams, dataFile);
+        for (PlayerData playerData : existingData) {
+            if (playerData.getPlayerName().equals(playerName)) {
+                return true; // Player found
+            }
         }
+
+        return false; // Player not found
     }
 
     public static void removeTeamDataFromFile(String teamName, File dataFile) {
@@ -126,9 +114,7 @@ public class JsonHelper {
                 iterator.remove();
             }
         }
-
-        // Write the updated data back to the file
-        writeTeamDataToFile(existingTeams, dataFile);
+        writeDataToFile(existingTeams, dataFile, TEAM_DATA_LIST_TYPE);
     }
 
     public static List<TeamData> readExistingTeamDataFromFile(File dataFile) {
@@ -141,14 +127,9 @@ public class JsonHelper {
         }
     }
 
-    private static void writeTeamDataToFile(List<TeamData> data, File dataFile) {
-        try (FileWriter writer = new FileWriter(dataFile)) {
-            // Serialize and write the updated data to the file
-            gson.toJson(data, writer);
-            ArchaicEvent.logger.info("Team data written successfully to: " + dataFile.getAbsolutePath());
-        } catch (IOException e) {
-            ArchaicEvent.logger.error("An error occurred while writing team data to the file: " + e.getMessage());
-        }
+    public static void addTeamDataToFile(TeamData newTeamData, File dataFile) {
+        List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
+        addDataToFile(existingTeams, newTeamData, dataFile, TEAM_DATA_LIST_TYPE);
     }
 
     public static boolean containsTeamData(List<TeamData> dataList, TeamData newTeamData) {
@@ -173,7 +154,7 @@ public class JsonHelper {
                 existingTeams.set(i, updatedTeamData);
 
                 // Write the updated data back to the file
-                writeTeamDataToFile(existingTeams, dataFile);
+                writeDataToFile(existingTeams, dataFile, TEAM_DATA_LIST_TYPE);
                 return;
             }
         }
@@ -191,15 +172,33 @@ public class JsonHelper {
         return null; // Team data not found
     }
 
-    public static TeamData getTeamByOwnerName(String ownerName, File dataFile) {
+    public static TeamData getTeamByMemberName(String memberName, File dataFile) {
         List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
 
         for (TeamData teamData : existingTeams) {
-            if (teamData.getOwner().getPlayerName().equals(ownerName)) {
-                return teamData;
+            for (PlayerData member : teamData.getMembers()) {
+                if (member.getPlayerName().equals(memberName)) {
+                    return teamData;
+                }
             }
         }
 
-        return null; // Player does not own a team
+        return null; // Player is not a member of any team
     }
+
+    public static boolean doesTeamExistByName(String teamName, File dataFile) {
+        List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
+
+        for (TeamData teamData : existingTeams) {
+            if (teamData.getTeamName().equals(teamName)) {
+                return true; // Team found
+            }
+        }
+        return false; // Team not found
+    }
+
+    private static void handleIOException(String message, IOException e) {
+        ArchaicEvent.logger.error(message + ": " + e.getMessage());
+    }
+
 }

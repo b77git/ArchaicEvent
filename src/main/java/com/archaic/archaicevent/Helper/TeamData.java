@@ -60,6 +60,10 @@ public class TeamData {
         return members;
     }
 
+    public List<PlayerData> getPendingInvites() {
+        return pendingInvites;
+    }
+
     public void setBeacon(BeaconData beacon) {
         this.beacon = beacon;
         updateTeamDataInFile(this, ArchaicEvent.teamDatafile);
