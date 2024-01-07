@@ -1,16 +1,12 @@
 package com.archaic.archaicevent.Commands;
 
 import com.archaic.archaicevent.ArchaicEvent;
-import com.archaic.archaicevent.Helper.JsonHelper;
-import com.archaic.archaicevent.Helper.PlayerData;
-import com.archaic.archaicevent.Helper.TeamData;
+import com.archaic.archaicevent.Helper.*;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
-
-import java.util.Arrays;
 
 public class DisbandCommand extends CommandBase {
 
@@ -44,7 +40,15 @@ public class DisbandCommand extends CommandBase {
     }
 
     public static void disband(MinecraftServer server, ICommandSender sender, TeamData teamData) {
-        JsonHelper.removeTeamDataFromFile(teamData.getTeamName(), ArchaicEvent.teamDatafile);
+        BeaconData beaconData = teamData.getBeacon();
+
+        //delete the teams beacon from world
+        if (beaconData != null) {
+            BeaconManager beaconManager = new BeaconManager();
+            beaconManager.deleteBeacon(beaconData);
+        }
+
+        JsonHelper.removeTeamDataFromFile(teamData.getName(), ArchaicEvent.teamDatafile);
         notifyTeam(server, teamData);
     }
 

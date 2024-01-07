@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class JsonHelper {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
     private static final Type PLAYER_DATA_LIST_TYPE = new TypeToken<List<PlayerData>>() {}.getType();
     private static final Type TEAM_DATA_LIST_TYPE = new TypeToken<List<TeamData>>() {}.getType();
 
@@ -105,7 +105,7 @@ public class JsonHelper {
         Iterator<TeamData> iterator = existingTeams.iterator();
         while (iterator.hasNext()) {
             TeamData teamData = iterator.next();
-            if (teamData.getTeamName().equals(teamName)) {
+            if (teamData.getName().equals(teamName)) {
                 // Update each member in the team to no longer be in a team
                 for (PlayerData member : teamData.getMembers()) {
                     member.setinTeam(false);
@@ -135,7 +135,7 @@ public class JsonHelper {
     public static boolean containsTeamData(List<TeamData> dataList, TeamData newTeamData) {
         // Check if the new team data matches any existing entry
         for (TeamData existingTeamData : dataList) {
-            if (existingTeamData.getTeamName().equals(newTeamData.getTeamName())) {
+            if (existingTeamData.getName().equals(newTeamData.getName())) {
                 return true; // Match found
             }
         }
@@ -149,7 +149,7 @@ public class JsonHelper {
         // Find and update the existing team
         for (int i = 0; i < existingTeams.size(); i++) {
             TeamData existingTeamData = existingTeams.get(i);
-            if (existingTeamData.getTeamName().equals(updatedTeamData.getTeamName())) {
+            if (existingTeamData.getName().equals(updatedTeamData.getName())) {
                 // Update the existing team with new data
                 existingTeams.set(i, updatedTeamData);
 
@@ -164,7 +164,7 @@ public class JsonHelper {
         List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
 
         for (TeamData teamData : existingTeams) {
-            if (teamData.getTeamName().equals(teamName)) {
+            if (teamData.getName().equals(teamName)) {
                 return teamData;
             }
         }
@@ -190,7 +190,7 @@ public class JsonHelper {
         List<TeamData> existingTeams = readExistingTeamDataFromFile(dataFile);
 
         for (TeamData teamData : existingTeams) {
-            if (teamData.getTeamName().equals(teamName)) {
+            if (teamData.getName().equals(teamName)) {
                 return true; // Team found
             }
         }
@@ -200,5 +200,4 @@ public class JsonHelper {
     private static void handleIOException(String message, IOException e) {
         ArchaicEvent.logger.error(message + ": " + e.getMessage());
     }
-
 }

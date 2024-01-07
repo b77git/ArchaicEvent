@@ -75,15 +75,16 @@ public class InviteCommand extends CommandBase {
             return;
         }
 
+        if (senderTeam.getMembers().size() >= ArchaicEvent.configHandler.TeamLimit) {
+            sender.sendMessage(new TextComponentString(senderTeam.getName() + " has already reached the team limit!"));
+        }
+
         if (!isPlayerOnline(server, inviteeUsername)) {
             sender.sendMessage(new TextComponentString("This user must be online."));
             return;
         }
 
-        senderTeam.addInvite(inviteeData);
-
-        EntityPlayerMP inviteeUser = server.getPlayerList().getPlayerByUsername(inviteeUsername);
-        inviteeUser.sendMessage(new TextComponentString("You have been invited to " + senderTeam.getTeamName()));
+        handleInvite(server, sender, senderTeam, inviteeData);
     }
 
     public static boolean isPlayerOnline(MinecraftServer server, String playerName) {
@@ -102,5 +103,12 @@ public class InviteCommand extends CommandBase {
 
     private static boolean isMatchingPlayer(EntityPlayer player, String playerName) {
         return player instanceof EntityPlayerMP && player.getName().equals(playerName);
+    }
+
+    private void handleInvite(MinecraftServer server, ICommandSender sender, TeamData senderTeam, PlayerData inviteePlayerData){
+        senderTeam.addInvite(inviteePlayerData);
+
+        EntityPlayerMP inviteeUser = server.getPlayerList().getPlayerByUsername(inviteePlayerData.getPlayerName());
+        inviteeUser.sendMessage(new TextComponentString("You have been invited to " + senderTeam.getName()));
     }
 }

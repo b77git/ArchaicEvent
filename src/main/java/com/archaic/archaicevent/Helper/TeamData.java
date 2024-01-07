@@ -1,20 +1,18 @@
 package com.archaic.archaicevent.Helper;
 
 import com.archaic.archaicevent.ArchaicEvent;
-import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.archaic.archaicevent.Helper.JsonHelper.updateTeamDataInFile;
 
 public class TeamData {
-    @Expose  private String name;
-    @Expose  private PlayerData owner;
-    @Expose  private BeaconData beacon;
-    @Expose  private List<PlayerData> members;
-    @Expose  private List<PlayerData> pendingInvites;
+    private String name;
+    private PlayerData owner;
+    private BeaconData beacon;
+    private List<PlayerData> members;
+    private List<PlayerData> pendingInvites;
 
 
     public TeamData(String name, PlayerData owner){
@@ -26,10 +24,6 @@ public class TeamData {
 
         this.members.add(owner);
         owner.setinTeam(true);
-    }
-
-    public String getTeamName() {
-        return name;
     }
 
     public void addMember(PlayerData player){

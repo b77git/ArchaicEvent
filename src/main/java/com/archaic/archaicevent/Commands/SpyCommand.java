@@ -4,7 +4,6 @@ import com.archaic.archaicevent.Helper.PlayerData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
 
 public class SpyCommand extends CommandBase {
 

@@ -2,13 +2,13 @@ package com.archaic.archaicevent;
 
 import com.archaic.archaicevent.Client.ClientKeybinds;
 import com.archaic.archaicevent.Commands.CommandBaseHandler;
+import com.archaic.archaicevent.Events.BeaconPlacementEventHandler;
 import com.archaic.archaicevent.Events.ClientJoin;
 import com.archaic.archaicevent.Events.ServerJoin;
 import com.archaic.archaicevent.Gui.GuiHandler;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.minecraft.command.CommandHandler;
+import com.archaic.archaicevent.Helper.ConfigHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -33,6 +33,7 @@ public class ArchaicEvent {
 
     public static Logger logger;
     public static File datafolderDir;
+    public static ConfigHandler configHandler;
 
     public static File playerDataFile;
     public static File teamDatafile;
@@ -60,9 +61,11 @@ public class ArchaicEvent {
     public void serverSetup(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandBaseHandler());
         MinecraftForge.EVENT_BUS.register(new ServerJoin());
+        MinecraftForge.EVENT_BUS.register(new BeaconPlacementEventHandler());
         // Get the server directory
         File serverDir = event.getServer().getDataDirectory();
         datafolderDir = new File(serverDir, "EventData");
+        configSetup(serverDir);
 
         playerDataFile = new File(ArchaicEvent.datafolderDir, "PlayerData.json");
         teamDatafile = new File(ArchaicEvent.datafolderDir, "TeamData.json");
@@ -80,5 +83,27 @@ public class ArchaicEvent {
         MinecraftForge.EVENT_BUS.register(ClientKeybinds.class);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(new ClientJoin());
+    }
+
+    public void configSetup(File serverDir){
+        File configDir = new File(serverDir, "config");
+        if (!configDir.exists()) {
+            configDir.mkdirs();
+        }
+
+        File configFile = new File(configDir, "ArchaicEvent.cfg");
+        Configuration config = new Configuration(configFile);
+
+        logger.info("Config directory: " + configDir.getAbsolutePath());
+        logger.info("Config file: " + configFile.getAbsolutePath());
+        configHandler = new ConfigHandler(config, logger);
+
+        if (config.hasChanged()) {
+            logger.info("Config has changed; saving...");
+            config.save();
+            logger.info("Config saved.");
+        } else {
+            logger.info("No changes detected in the configuration.");
+        }
     }
 }
