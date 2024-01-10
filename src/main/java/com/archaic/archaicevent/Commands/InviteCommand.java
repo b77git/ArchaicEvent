@@ -29,6 +29,11 @@ public class InviteCommand extends CommandBase {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 0;
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
         if (args.length == 3){
             invite(server, sender, args);

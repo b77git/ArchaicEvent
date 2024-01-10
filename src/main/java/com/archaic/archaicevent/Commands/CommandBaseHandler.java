@@ -30,6 +30,11 @@ public class CommandBaseHandler extends CommandBase {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 0;
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
         ArchaicEvent.logger.info("Executing /archaic command");
         if (args.length == 0) {
@@ -82,8 +87,10 @@ public class CommandBaseHandler extends CommandBase {
             case "disband":
                 new DisbandCommand().execute(server, sender, args);
                 break;
-            case "help":
             case "join":
+                new JoinCommand().execute(server, sender, args);
+                break;
+            case "help":
             case "leave":
                 break;
             default:

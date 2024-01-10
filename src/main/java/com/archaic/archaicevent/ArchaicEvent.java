@@ -7,6 +7,7 @@ import com.archaic.archaicevent.Events.ClientJoin;
 import com.archaic.archaicevent.Events.ServerJoin;
 import com.archaic.archaicevent.Gui.GuiHandler;
 import com.archaic.archaicevent.Helper.ConfigHandler;
+import com.archaic.archaicevent.Spawning.SpawnEvolutions;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -59,9 +60,6 @@ public class ArchaicEvent {
 
     @EventHandler
     public void serverSetup(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandBaseHandler());
-        MinecraftForge.EVENT_BUS.register(new ServerJoin());
-        MinecraftForge.EVENT_BUS.register(new BeaconPlacementEventHandler());
         // Get the server directory
         File serverDir = event.getServer().getDataDirectory();
         datafolderDir = new File(serverDir, "EventData");
@@ -76,6 +74,11 @@ public class ArchaicEvent {
                 logger.error("Failed to create EventData folder!");
             }
         }
+
+        event.registerServerCommand(new CommandBaseHandler());
+        MinecraftForge.EVENT_BUS.register(new ServerJoin());
+        MinecraftForge.EVENT_BUS.register(new BeaconPlacementEventHandler());
+//        MinecraftForge.EVENT_BUS.register(new SpawnEvolutions());
     }
 
     public void clientSetup(){

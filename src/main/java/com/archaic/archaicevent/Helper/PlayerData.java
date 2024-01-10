@@ -14,6 +14,7 @@ public class PlayerData {
     private boolean alive;
     private boolean spyToggled;
     private boolean inTeam;
+    private int mobEvolution;
 
     public PlayerData (String username, String uuid) {
         this.username = username;
@@ -21,6 +22,7 @@ public class PlayerData {
         this.alive = true;
         this.inTeam = false;
         this.spyToggled = false;
+        this.mobEvolution = 1;
     }
 
     public static PlayerData getPlayerData(String playerName){
@@ -50,6 +52,10 @@ public class PlayerData {
         return uuid;
     }
 
+    public int getMobEvolution() {
+        return mobEvolution;
+    }
+
     public void setinTeam(boolean inTeam) {
         this.inTeam = inTeam;
         // Update the JSON to reflect this change
@@ -66,5 +72,9 @@ public class PlayerData {
     public void setSpyToggled(boolean spyToggled) {
         this.spyToggled = spyToggled;
         updatePlayerDataInFile(this, ArchaicEvent.playerDataFile);
+    }
+
+    public void setMobEvolution(int mobEvolution) {
+        this.mobEvolution = mobEvolution;
     }
 }
