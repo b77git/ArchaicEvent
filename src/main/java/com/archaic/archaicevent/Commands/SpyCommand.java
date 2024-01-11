@@ -1,5 +1,7 @@
 package com.archaic.archaicevent.Commands;
 
+import com.archaic.archaicevent.ArchaicEvent;
+import com.archaic.archaicevent.Helper.JsonHelper;
 import com.archaic.archaicevent.Helper.PlayerData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -27,12 +29,12 @@ public class SpyCommand extends CommandBase {
         toggleSpy(server, sender, args);
     }
 
-    public void toggleSpy(MinecraftServer server, ICommandSender sender, String[] args){
-        PlayerData player = new PlayerData(sender.getDisplayName().getUnformattedText(), sender.getCommandSenderEntity().getUniqueID().toString());
-        if (player.isSpyToggled()){
-            player.setSpyToggled(true);
+    private void toggleSpy(MinecraftServer server, ICommandSender sender, String[] args){
+        PlayerData playerData = JsonHelper.getPlayerDataByName(sender.getDisplayName().getUnformattedText(), ArchaicEvent.playerDataFile);
+        if (playerData.isSpyToggled()){
+            playerData.setSpyToggled(true);
             return;
         }
-        player.setSpyToggled(false);
+        playerData.setSpyToggled(false);
     }
 }
