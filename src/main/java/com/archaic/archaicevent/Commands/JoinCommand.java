@@ -35,7 +35,7 @@ public class JoinCommand extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-        sender.sendMessage(new TextComponentString("Executing /archaic join"));
+        joinTeam(server ,sender, args);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class JoinCommand extends CommandBase {
         return teamNames;
     }
 
-    private void join(MinecraftServer server, ICommandSender sender, String[] args) {
+    private void joinTeam(MinecraftServer server, ICommandSender sender, String[] args) {
         String teamName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         PlayerData playerData = JsonHelper.getPlayerDataByName(sender.getDisplayName().getUnformattedText(), ArchaicEvent.playerDataFile);
 
