@@ -1,14 +1,12 @@
 package com.archaic.archaicevent.Commands;
 
 import com.archaic.archaicevent.ArchaicEvent;
+import com.archaic.archaicevent.Helper.BeaconManager;
 import com.archaic.archaicevent.Helper.JsonHelper;
 import com.archaic.archaicevent.Helper.PlayerData;
 import com.archaic.archaicevent.Helper.TeamData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
@@ -63,7 +61,8 @@ public class CreateCommand extends CommandBase {
         }
 
         JsonHelper.addTeamDataToFile(teamData, ArchaicEvent.teamDatafile);
-        giveBeacon(sender);
+        BeaconManager manager = new BeaconManager();
+        manager.giveBeacon(sender);
         sender.sendMessage(new TextComponentString("The team " + teamName + " has been created."));
     }
 
@@ -73,19 +72,5 @@ public class CreateCommand extends CommandBase {
 
     private boolean teamAlreadyExists(TeamData teamData) {
         return JsonHelper.containsTeamData(JsonHelper.readExistingTeamDataFromFile(ArchaicEvent.teamDatafile), teamData);
-    }
-
-    private void giveBeacon(ICommandSender sender){
-        if (sender instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) sender;
-
-            ItemStack beaconStack = new ItemStack(Blocks.BEACON);
-
-            // Check if the player's inventory is not full
-            if (!player.inventory.addItemStackToInventory(beaconStack)) {
-                // If the inventory is full, drop the beacon at the player's location
-                player.dropItem(beaconStack, false);
-            }
-        }
     }
 }

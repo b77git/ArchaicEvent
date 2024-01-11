@@ -76,5 +76,6 @@ public class PlayerData {
 
     public void setMobEvolution(int mobEvolution) {
         this.mobEvolution = mobEvolution;
+        updatePlayerDataInFile(this, ArchaicEvent.playerDataFile);
     }
 }

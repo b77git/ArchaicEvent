@@ -5,9 +5,6 @@ import com.archaic.archaicevent.Helper.*;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
@@ -57,7 +54,8 @@ public class DisbandCommand extends CommandBase {
         }
 
         JsonHelper.removeTeamDataFromFile(teamData.getName(), ArchaicEvent.teamDatafile);
-        removeBeacon(sender);
+        BeaconManager manager = new BeaconManager();
+        manager.removeBeacon(sender);
         notifyTeam(server, teamData);
     }
 
@@ -73,21 +71,5 @@ public class DisbandCommand extends CommandBase {
 
     private static EntityPlayerMP getPlayerByUsername(String playerName, MinecraftServer server) {
         return server.getPlayerList().getPlayerByUsername(playerName);
-    }
-
-    private static void removeBeacon(ICommandSender sender) {
-        if (sender instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) sender;
-
-            // Check if the player has a beacon in their inventory
-            for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-                ItemStack stack = player.inventory.getStackInSlot(i);
-
-                if (stack.getItem() == Item.getItemFromBlock(Blocks.BEACON)) {
-                    // Remove the beacon from the player's inventory
-                    player.inventory.removeStackFromSlot(i);
-                }
-            }
-        }
     }
 }

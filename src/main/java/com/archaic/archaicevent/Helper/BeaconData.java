@@ -1,12 +1,13 @@
 package com.archaic.archaicevent.Helper;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class BeaconData {
     private final String teamName;
     private final int x_loc, y_loc, z_loc, dim;
     private boolean broken;
-    private final Date lastMoved;
+    private final LocalDateTime lastMoved;
 
     public BeaconData(String teamName, int x_loc, int y_loc, int z_loc, int dim){
         this.teamName = teamName;
@@ -56,7 +57,7 @@ public class BeaconData {
         return teamName;
     }
 
-    public Date getLastMoved() {
+    public LocalDateTime getLastMoved() {
         return lastMoved;
     }
 

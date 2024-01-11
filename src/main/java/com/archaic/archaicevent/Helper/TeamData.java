@@ -10,7 +10,7 @@ import static com.archaic.archaicevent.Helper.JsonHelper.updateTeamDataInFile;
 public class TeamData {
     private String name;
     private PlayerData owner;
-    private BeaconData beacon;
+    private BeaconData beacon, previousbeacon;
     private List<PlayerData> members;
     private List<PlayerData> pendingInvites;
 
@@ -19,6 +19,7 @@ public class TeamData {
         this.name = name;
         this.owner = owner;
         this.beacon = null;
+        this.previousbeacon = null;
         this.members = new ArrayList<>();
         this.pendingInvites = new ArrayList<>();
 
@@ -46,6 +47,10 @@ public class TeamData {
         return beacon;
     }
 
+    public BeaconData getPreviousbeacon() {
+        return previousbeacon;
+    }
+
     public PlayerData getOwner() {
         return owner;
     }
@@ -60,6 +65,11 @@ public class TeamData {
 
     public void setBeacon(BeaconData beacon) {
         this.beacon = beacon;
+        updateTeamDataInFile(this, ArchaicEvent.teamDatafile);
+    }
+
+    public void setPreviousbeacon(BeaconData previousbeacon) {
+        this.previousbeacon = previousbeacon;
         updateTeamDataInFile(this, ArchaicEvent.teamDatafile);
     }
 
