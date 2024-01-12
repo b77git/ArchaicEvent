@@ -65,6 +65,7 @@ public class MoveCommand extends CommandBase {
         LocalDateTime lastMoved = beaconData.getLastMoved();
 
         if (!onCooldown(sender, lastMoved, currentTime)) {
+            beaconData.setLastMoved(currentTime);
             teamData.setPreviousbeacon(beaconData);
             teamData.setBeacon(null);
 
@@ -105,4 +106,4 @@ public class MoveCommand extends CommandBase {
             }
         };
     }
-}   
+}
