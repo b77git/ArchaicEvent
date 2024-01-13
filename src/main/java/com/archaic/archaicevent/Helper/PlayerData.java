@@ -2,6 +2,7 @@ package com.archaic.archaicevent.Helper;
 
 import com.archaic.archaicevent.ArchaicEvent;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.archaic.archaicevent.Helper.JsonHelper.readExistingPlayerDataFromFile;
@@ -15,6 +16,7 @@ public class PlayerData {
     private boolean spyToggled;
     private boolean inTeam;
     private int mobEvolution;
+    private LocalDateTime lastHit;
 
     public PlayerData (String username, String uuid) {
         this.username = username;
@@ -23,6 +25,7 @@ public class PlayerData {
         this.inTeam = false;
         this.spyToggled = false;
         this.mobEvolution = 1;
+        this.lastHit = null;
     }
 
     public static PlayerData getPlayerData(String playerName){
@@ -56,16 +59,17 @@ public class PlayerData {
         return mobEvolution;
     }
 
+    public LocalDateTime getLastHit() {
+        return lastHit;
+    }
+
     public void setinTeam(boolean inTeam) {
         this.inTeam = inTeam;
-        // Update the JSON to reflect this change
         updatePlayerDataInFile(this, ArchaicEvent.playerDataFile);
     }
 
     public void setAlive(boolean alive) {
         this.alive = alive;
-
-        // Update the JSON to reflect this change
         updatePlayerDataInFile(this, ArchaicEvent.playerDataFile);
     }
 
@@ -76,6 +80,11 @@ public class PlayerData {
 
     public void setMobEvolution(int mobEvolution) {
         this.mobEvolution = mobEvolution;
+        updatePlayerDataInFile(this, ArchaicEvent.playerDataFile);
+    }
+
+    public void setLastHit(LocalDateTime lastHit) {
+        this.lastHit = lastHit;
         updatePlayerDataInFile(this, ArchaicEvent.playerDataFile);
     }
 }
